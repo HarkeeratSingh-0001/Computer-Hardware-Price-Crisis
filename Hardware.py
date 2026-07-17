@@ -5,19 +5,19 @@ import plotly.express as px
 
 # Page configuration
 st.set_page_config(
-    page_title="RAM Memory Shortage Crisis Dashboard",
+    page_title="Computer Hardware Price Crisis Dashboard",
     page_icon="💾",
     layout="wide",
 )
 
 # Main title
-st.title("Ultimate Memory Shortage Crisis Data Analysis")
+st.title("💾 Computer Hardware Price Crisis Data Analysis")
 st.markdown("---")
 
 # ============================================================
 # Executive Summary
 # ============================================================
-st.header("Executive Summary")
+st.header("📋 Executive Summary")
 st.markdown("""
 This data science project analyzes a simulated global RAM (memory module) market during a
 **memory shortage crisis**, covering 10,000 memory kits sold across brands, regions, and
@@ -43,9 +43,9 @@ st.markdown("---")
 # ============================================================
 # Project Description
 # ============================================================
-st.header("Project Description")
+st.header("📖 Project Description")
 
-st.subheader("Problem Statement")
+st.subheader("❗ Problem Statement")
 st.markdown("""
 Global memory (RAM) markets have experienced severe supply shortages, causing price spikes,
 inventory shocks, and shifting demand toward AI/enterprise-grade memory. This project uses a
@@ -57,7 +57,7 @@ synthetic but realistic RAM market dataset to help:
 - **Manufacturers**: Understand demand concentration across recommended-usage segments
 """)
 
-st.subheader("Dataset Overview")
+st.subheader("🗂️ Dataset Overview")
 st.markdown("""
 The dataset contains detailed information about individual RAM kits, including:
 
@@ -83,7 +83,7 @@ st.markdown("---")
 # ============================================================
 # Data Overview Section
 # ============================================================
-st.header("Data Overview")
+st.header("📊 Data Overview")
 
 
 @st.cache_data
@@ -95,7 +95,6 @@ def load_data():
     except Exception as e:
         st.error(f"Error loading dataset: {e}")
         return None
-
 
 @st.cache_data
 def prepare_dataframe_for_display(df, max_string_length=100):
@@ -126,7 +125,7 @@ if df is not None:
     # Parse timestamp as datetime for time-series charting
     df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
 
-    st.subheader("Dataset Basic Information")
+    st.subheader("ℹ️ Dataset Basic Information")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Total Records", f"{df.shape[0]:,}")
@@ -138,15 +137,15 @@ if df is not None:
         st.metric("Unique Brands", df['brand'].nunique())
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "Column Info",
-        "Missing Values",
-        "Sample Data",
-        "Statistics",
-        "Categorical Data",
+        "📝 Column Info",
+        "🚨 Missing Values",
+        "📄 Sample Data",
+        "📈 Statistics",
+        "🏷️ Categorical Data",
     ])
 
     with tab1:
-        st.subheader("Column Information")
+        st.subheader("📝 Column Information")
         col_info = pd.DataFrame({
             'Column Name': df.columns,
             'Data Type': df.dtypes.astype(str),
@@ -157,7 +156,7 @@ if df is not None:
         st.dataframe(prepare_dataframe_for_display(col_info), use_container_width=True)
 
     with tab2:
-        st.subheader("Missing Values Analysis")
+        st.subheader("🚨 Missing Values Analysis")
         missing_data = df.isnull().sum().sort_values(ascending=False)
         missing_data = missing_data[missing_data > 0]
         if not missing_data.empty:
@@ -171,21 +170,21 @@ if df is not None:
             st.success("No missing values found in the dataset!")
 
     with tab3:
-        st.subheader("Sample Data")
+        st.subheader("📄 Sample Data")
         st.write("First 10 rows of the dataset:")
         st.dataframe(prepare_dataframe_for_display(df.head(10)), use_container_width=True)
         st.write("Random Sample (10 rows):")
         st.dataframe(prepare_dataframe_for_display(df.sample(10)), use_container_width=True)
 
     with tab4:
-        st.subheader("Statistical Summary")
+        st.subheader("📈 Statistical Summary")
         numerical_cols = df.select_dtypes(include=[np.number]).columns
         if len(numerical_cols) > 0:
             st.write("**Numerical Columns Statistics:**")
             st.dataframe(prepare_dataframe_for_display(df[numerical_cols].describe()), use_container_width=True)
 
     with tab5:
-        st.subheader("Categorical Data Analysis")
+        st.subheader("🏷️ Categorical Data Analysis")
         categorical_cols = ['brand', 'generation', 'region', 'market_segment', 'recommended_usage', 'price_status']
         for col in categorical_cols:
             if col in df.columns:
@@ -202,7 +201,7 @@ st.markdown("---")
 # ============================================================
 # Data Visualization Section
 # ============================================================
-st.header("Data Visualization & Insights")
+st.header("📉 Data Visualization & Insights")
 
 if df is not None:
     df_viz = df.copy()
@@ -300,7 +299,7 @@ if df is not None:
     # ============================================================
     # Chart 1: Average RAM Price by Brand (px.bar)
     # ============================================================
-    st.subheader("1. Average RAM Price by Brand")
+    st.subheader("1. 💲 Average RAM Price by Brand")
     brand_price = df_viz.groupby('brand', as_index=False)['price_usd'].mean().sort_values('price_usd', ascending=False)
     fig1 = px.bar(
         brand_price, x='brand', y='price_usd',
@@ -319,7 +318,7 @@ if df is not None:
     # ============================================================
     # Chart 2: Memory Capacity Distribution (px.histogram)
     # ============================================================
-    st.subheader("2. Memory Capacity Distribution")
+    st.subheader("2. 📦 Memory Capacity Distribution")
     fig2 = px.histogram(
         df_viz, x='capacity_gb', nbins=30,
         title="Distribution of Memory Kit Capacities",
@@ -339,7 +338,7 @@ if df is not None:
     # ============================================================
     # Chart 3: Price vs Capacity (px.scatter)
     # ============================================================
-    st.subheader("3. Price vs Capacity")
+    st.subheader("3. 📈 Price vs Capacity")
     sample_size = min(3000, len(df_viz))
     df_sample = df_viz.sample(sample_size, random_state=42)
     fig3 = px.scatter(
@@ -360,7 +359,7 @@ if df is not None:
     # ============================================================
     # Chart 4: Price Trend Over Time (px.line)
     # ============================================================
-    st.subheader("4. Price Trend Over Time")
+    st.subheader("4. 📅 Price Trend Over Time")
     price_trend = df_viz.dropna(subset=['timestamp']).copy()
     price_trend['month'] = price_trend['timestamp'].dt.to_period('M').dt.to_timestamp()
     monthly_price = price_trend.groupby('month', as_index=False)['price_usd'].mean()
@@ -385,7 +384,7 @@ if df is not None:
     # ============================================================
     # Chart 5: Price Distribution by Brand (px.box)
     # ============================================================
-    st.subheader("5. Price Distribution by Brand")
+    st.subheader("5. 📊 Price Distribution by Brand")
     fig5 = px.box(
         df_viz, x='brand', y='price_usd',
         title="Price Distribution by Brand",
@@ -403,7 +402,7 @@ if df is not None:
     # ============================================================
     # Chart 6: RAM Generation Distribution (px.pie / donut)
     # ============================================================
-    st.subheader("6. RAM Generation Distribution")
+    st.subheader("6. 💾 RAM Generation Distribution")
     gen_counts = df_viz['generation'].value_counts()
     fig6 = px.pie(
         values=gen_counts.values, names=gen_counts.index,
@@ -421,7 +420,7 @@ if df is not None:
     # ============================================================
     # Chart 7: Brand → Model Hierarchy (px.treemap)
     # ============================================================
-    st.subheader("7. Brand → Model Hierarchy")
+    st.subheader("7. 🌳 Brand → Model Hierarchy")
     treemap_data = df_viz.groupby(['brand', 'model_name'], as_index=False)['price_usd'].mean()
     top_models = treemap_data.sort_values('price_usd', ascending=False).groupby('brand').head(5)
     fig7 = px.treemap(
@@ -439,7 +438,7 @@ if df is not None:
     # ============================================================
     # Chart 8: Recommended Usage Breakdown (px.sunburst)
     # ============================================================
-    st.subheader("8. Recommended Usage Breakdown")
+    st.subheader("8. 🎯 Recommended Usage Breakdown")
     sunburst_data = df_viz.groupby(['recommended_usage', 'brand', 'generation'], as_index=False).size()
     fig8 = px.sunburst(
         sunburst_data, path=['recommended_usage', 'brand', 'generation'], values='size',
@@ -457,7 +456,7 @@ if df is not None:
     # ============================================================
     # Chart 9: Speed vs Price (px.scatter)
     # ============================================================
-    st.subheader("9. Speed vs Price")
+    st.subheader("9. ⚡ Speed vs Price")
     fig9 = px.scatter(
         df_sample, x='speed_mts', y='price_usd',
         title="Memory Speed vs Price",
@@ -476,7 +475,7 @@ if df is not None:
     # ============================================================
     # Chart 10: Capacity Distribution by Brand (px.violin)
     # ============================================================
-    st.subheader("10. Capacity Distribution by Brand")
+    st.subheader("10. 📦 Capacity Distribution by Brand")
     fig10 = px.violin(
         df_viz, x='brand', y='capacity_gb',
         title="Capacity Distribution by Brand",
@@ -495,7 +494,7 @@ if df is not None:
     # ============================================================
     # Conclusion
     # ============================================================
-    st.header("Project Conclusion & Key Insights")
+    st.header("🎓   Project Conclusion & Key Insights")
     st.markdown("---")
 
     st.subheader("Data Analysis Summary")
